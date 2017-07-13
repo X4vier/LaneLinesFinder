@@ -11,6 +11,10 @@ This project doesn't use any artificial intelligence techniques, just old-school
 
 The rest of this document is devoted to explaining how the code works.
 
+![Pipeline Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/pipeline_example.jpg)
+
+
+
 ---
 
 ## Camera Calibration
@@ -33,6 +37,25 @@ The code for converting the camera images to binary images is in the file  `bina
 ![Threshold Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/threshold_example.jpg)
 
 ![Mask Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/mask_example.jpg)
+
+
+## Identifying Lane Lines
+
+The code for identifying lane lines in the file `hist_poly_fit.py`. Once the image has been undistorted, binarized and transformed to birds-eye view the `hist_poly_fit()` function first constructs a histogram of the number of pixels in each column in the bottom half of the image.
+
+The column on the left hand side of the image containing the most pixels is assumed to be the base of the left lane line, similarly the most populated column on the right of the image identifies the base of the right lane line.
+
+The pixels belonging to the lane lines are then identified by placing a window of a certain height and depth at the current base of the line, marking all pixels within that window as part of the lane line, then shifting the window upwards and repeating the procedure. If enough pixels were found in the previous window, the center of new window will be shifted to the mean x-position of the pixels in the old window.
+
+Once the pixels belonging to the left and right lane lines have been identified, they are used to fit a second-order polynomial, and this polynomial is our estimate for where the lane lines are.
+
+![Line Fit Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/line_fit_example.jpg)
+
+## Improvments to be made
+
+While this pipeline works well on the video, the implementation is quite fragile and won't work as well on new footage. A major shortcoming of this implementation is that the algorithm doesn’t make use of the fact that lane lines in one frame should be very similar to lane lines in the other frame, and that the left and right lane lines should always be parallel and always be separated by a similar distance.
+
+Finding the base of the lane lines using a histogram is also quite brittle, it would be better to perform a convolution over several columns instead of simply picking the peak of the histogram (A high, sharp peak shouldn’t be chosen over a slightly less high but broad bump).
 
 
 --**Xavier O'Rourke**
