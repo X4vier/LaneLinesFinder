@@ -7,9 +7,7 @@ This is a project I completed as part of Udacity's self-driving car nanodegree p
 
 The code in this project looks at RGB images taken from a car's dashboard camera and works out where the lane lines are in the image. It then draws the lane lines over the original image. To see the final result, take a look at the video file `output.mp4`
 
-This project doesn't use any artificial intelligence techniques, just old-school computer vision, it serves to demonstrate my ability to write effective, readable python code.
-
-The rest of this document is devoted to explaining how the code works.
+The rest of this README is devoted to explaining how the code works.
 
 ![Pipeline Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/pipeline_example.jpg)
 
@@ -25,14 +23,14 @@ The code for calibrating the camera and correcting for distortion is found in th
 
 ## Perspective Transform
 
-To find lane lines, it is useful to transform images to a ‘bird’s-eye view’. The code for calculating the perspective transform matrix is found in `perspective_transform.py`. The perspective transform matrix is calculated using an image of straight road lines. Four points which sit approximately on the corners of a rectangle when viewed from above are specified, then the `cv2.getPerspectiveTransform()` function uses these points to calculate the perspective transform matrix. The transformation matrix is saved to the file `perspective_transform.p`. I wrote a function called `perspective_transform()` which uses the contents of this file to transform camera images.
+To find lane lines, it is useful to transform images to a â€˜birdâ€™s-eye viewâ€™. The code for calculating the perspective transform matrix is found in `perspective_transform.py`. The perspective transform matrix is calculated using an image of straight road lines. Four points which sit approximately on the corners of a rectangle when viewed from above are specified, then the `cv2.getPerspectiveTransform()` function uses these points to calculate the perspective transform matrix. The transformation matrix is saved to the file `perspective_transform.p`. I wrote a function called `perspective_transform()` which uses the contents of this file to transform camera images.
 
 ![Perspective Transofrm Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/perspective_example.jpg)
 
 
 ## Binary Thresholding
 
-The code for converting the camera images to binary images is in the file  `binary_threshold.py`. In order to determine which pixels to include in the binary image, three filters are applied- a filter which checks whether the pixel’s red component is within a certain range of values, a filter which checks whether the pixel’s HLS saturation is within a certain range of values, and a filter which checks whether the value obtained by applying the sobel operator in the x direction is within a certain range of values. The thresholds for these filters were determined by experimenting on the test set images. A mask is also applied to the image, so that pixels in a region of the image where lane lines don’t usually appear are removed. If a pixel passes through any of the three filters and isn’t masked, then it will be included in the output of the `binary_threshold()` function.
+The code for converting the camera images to binary images is in the file  `binary_threshold.py`. In order to determine which pixels to include in the binary image, three filters are applied- a filter which checks whether the pixelâ€™s red component is within a certain range of values, a filter which checks whether the pixelâ€™s HLS saturation is within a certain range of values, and a filter which checks whether the value obtained by applying the sobel operator in the x direction is within a certain range of values. The thresholds for these filters were determined by experimenting on the test set images. A mask is also applied to the image, so that pixels in a region of the image where lane lines donâ€™t usually appear are removed. If a pixel passes through any of the three filters and isnâ€™t masked, then it will be included in the output of the `binary_threshold()` function.
 
 ![Threshold Image](https://github.com/X4vier/LaneLinesFinder/blob/master/example_outputs/threshold_example.jpg)
 
@@ -53,9 +51,9 @@ Once the pixels belonging to the left and right lane lines have been identified,
 
 ## Improvments to be made
 
-While this pipeline works well on the video, the implementation is quite fragile and won't work as well on new footage. A major shortcoming of this implementation is that the algorithm doesn’t make use of the fact that lane lines in one frame should be very similar to lane lines in the other frame, and that the left and right lane lines should always be parallel and always be separated by a similar distance.
+While this pipeline works well on the video, the implementation is quite fragile and won't work as well on new footage. A major shortcoming of this implementation is that the algorithm doesnâ€™t make use of the fact that lane lines in one frame should be very similar to lane lines in the other frame, and that the left and right lane lines should always be parallel and always be separated by a similar distance.
 
-Finding the base of the lane lines using a histogram is also quite brittle, it would be better to perform a convolution over several columns instead of simply picking the peak of the histogram (A high, sharp peak shouldn’t be chosen over a slightly less high but broad bump).
+Finding the base of the lane lines using a histogram is also quite brittle, it would be better to perform a convolution over several columns instead of simply picking the peak of the histogram (A high, sharp peak shouldnâ€™t be chosen over a slightly less high but broad bump).
 
 
 --**Xavier O'Rourke**
